@@ -1,0 +1,375 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------------------------------
+// Admin users (Super Admin dashboard) with role-based access
+// ----------------------------------------------------------------------------
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("admin") // superadmin | admin | viewer
+  permissions  String   @default("[]")
+  active       Boolean  @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Schools (run the Student MI test for Class 9–10)
+// ----------------------------------------------------------------------------
+model School {
+  id           String   @id @default(cuid())
+  name         String
+  code         String   @unique
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  city         String?
+  state        String?
+  address      String?
+  principal    String?
+  logoUrl      String?
+  status       String   @default("pending")
+  reportLang   String   @default("both") // en | pa | both
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  students Student[]
+}
+
+// ----------------------------------------------------------------------------
+// Companies (run the Employee psychometric test)
+// ----------------------------------------------------------------------------
+model Company {
+  id           String   @id @default(cuid())
+  name         String
+  code         String   @unique
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  city         String?
+  state        String?
+  address      String?
+  contactPerson String?
+  industry     String?
+  status       String   @default("pending")
+  reportLang   String   @default("both")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  employees Employee[]
+}
+
+// ----------------------------------------------------------------------------
+// Individual users (self-service, pay-per-test via Razorpay)
+// ----------------------------------------------------------------------------
+model IndividualUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  city         String?
+  dob          String?
+  reportLang   String   @default("both")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions TestSession[]
+  payments Payment[]
+}
+
+// ----------------------------------------------------------------------------
+// Test takers
+// ----------------------------------------------------------------------------
+model Student {
+  id            String   @id @default(cuid())
+  schoolId      String
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  name          String
+  fatherName    String?
+  motherName    String?
+  mobile        String?
+  otherMobile   String?
+  dob           String?
+  classCourse   String?
+  qualification String?
+  schoolNameRaw String?
+  address       String?
+  category      String?
+  aim           String?
+  venue         String?
+  email         String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      TestSession[]
+}
+
+model Employee {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  name        String
+  email       String?
+  mobile      String?
+  designation String?
+  department  String?
+  dob         String?
+  address     String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sessions    TestSession[]
+}
+
+// ----------------------------------------------------------------------------
+// Questions (bilingual) — testType selects which test they belong to
+// ----------------------------------------------------------------------------
+model Question {
+  id           String   @id @default(cuid())
+  testType     String   @default("employee") // employee | student
+  order        Int
+  textEn       String
+  textPa       String
+  skill        String   @default("") // employee: skill key
+  intelligence String?  // student: intelligence key
+  reverse      Boolean  @default(false)
+  scaleMax     Int      @default(5) // 5 (employee) | 4 (student)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([testType, order])
+}
+
+// ----------------------------------------------------------------------------
+// Test sessions, answers, reports
+// ----------------------------------------------------------------------------
+model TestSession {
+  id               String   @id @default(cuid())
+  testType         String   @default("employee") // employee | student
+  audience         String   @default("school")   // school | company | individual
+
+  studentId        String?
+  student          Student?        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  employeeId       String?
+  employee         Employee?       @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  individualUserId String?
+  individualUser   IndividualUser? @relation(fields: [individualUserId], references: [id], onDelete: Cascade)
+  studyCentreId    String?
+  studyCentre      StudyCentre?    @relation(fields: [studyCentreId], references: [id], onDelete: Cascade)
+
+  takerName        String?  // snapshot label (esp. for individual / centre)
+  status           String   @default("pending") // pending | in_progress | completed | locked
+  paid             Boolean  @default(true)       // individual sessions start unpaid
+  language         String   @default("en")
+  token            String   @unique
+  startedAt        DateTime?
+  completedAt      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  answers     Answer[]
+  report      Report?
+  payment     Payment?
+  transaction CentreTransaction?
+}
+
+model Answer {
+  id         String      @id @default(cuid())
+  sessionId  String
+  session    TestSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId String
+  order      Int
+  value      Int
+
+  @@unique([sessionId, questionId])
+}
+
+model Report {
+  id         String      @id @default(cuid())
+  sessionId  String      @unique
+  session    TestSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  kind       String      @default("employee_skills") // employee_skills | student_mi
+  totalScore Int         @default(0)
+  data       String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Payments (Razorpay — individual users only)
+// ----------------------------------------------------------------------------
+model Payment {
+  id               String   @id @default(cuid())
+  individualUserId String
+  individualUser   IndividualUser @relation(fields: [individualUserId], references: [id], onDelete: Cascade)
+  sessionId        String?  @unique
+  session          TestSession? @relation(fields: [sessionId], references: [id])
+  testType         String
+  amount           Int      // in INR rupees
+  currency         String   @default("INR")
+  razorpayOrderId  String   @unique
+  razorpayPaymentId String?
+  status           String   @default("created") // created | paid | failed
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Pricing (admin-editable, used by Individual checkout)
+// ----------------------------------------------------------------------------
+model Pricing {
+  id        String   @id @default(cuid())
+  key       String   @unique // student | employee | parent
+  label     String
+  amount    Int      // INR
+  active    Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Lead management (enrollment + contact inquiries)
+// ----------------------------------------------------------------------------
+model Lead {
+  id        String   @id @default(cuid())
+  type      String   @default("enroll") // enroll | contact | company | individual
+  name      String
+  email     String?
+  phone     String?
+  school    String?
+  city      String?
+  message   String?
+  status    String   @default("new")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Editable website content + RIASEC career suggestions (employee report)
+// ----------------------------------------------------------------------------
+model ContentBlock {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String?
+  body      String?
+  updatedAt DateTime @updatedAt
+}
+
+model CareerSuggestion {
+  id        String   @id @default(cuid())
+  type      String   @unique
+  label     String
+  fields    String
+  traits    String
+  formula   String
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Authorised Study Centres (partners who conduct tests & share revenue)
+// ----------------------------------------------------------------------------
+model StudyCentre {
+  id                String   @id @default(cuid())
+  name              String
+  code              String   @unique
+  email             String   @unique
+  passwordHash      String   @default("") // set by admin on approval
+  ownerName         String?
+  mobile            String?
+  city              String?
+  district          String?
+  state             String?
+  address           String?
+  existingInstitute String?
+  registrationType  String?
+  expectedStudents  Int?
+  documentPath      String?
+  message           String?
+  commissionPercent Int      @default(30) // AMG platform fee %
+  reportLang        String   @default("both")
+  status            String   @default("pending") // pending|approved|rejected|active|inactive|suspended
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  sessions       TestSession[]
+  transactions   CentreTransaction[]
+  settlements    Settlement[]
+  joiningPayment JoiningFeePayment?
+}
+
+// Joining-fee payment for a study centre (Cash / UPI; admin-verified).
+model JoiningFeePayment {
+  id          String   @id @default(cuid())
+  centreId    String   @unique
+  centre      StudyCentre @relation(fields: [centreId], references: [id], onDelete: Cascade)
+  amount      Int
+  mode        String   // cash | upi
+  collectedBy String?  // cash
+  reference   String?  // UTR / transaction id / cash receipt no
+  proofPath   String?  // uploaded screenshot (upi)
+  paymentDate String?
+  status      String   @default("pending") // pending | approved | rejected
+  remarks     String?
+  receiptNo   String?
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Simple key/value settings (joining fee, UPI id, QR image path, etc.)
+model Setting {
+  key   String @id
+  value String @default("")
+}
+
+model CentreTransaction {
+  id                String   @id @default(cuid())
+  centreId          String
+  centre            StudyCentre @relation(fields: [centreId], references: [id], onDelete: Cascade)
+  sessionId         String?     @unique
+  session           TestSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  takerName         String
+  testType          String   // student | employee
+  totalFee          Int
+  paymentMode       String   // online | offline | manual
+  amgShare          Int
+  centreShare       Int
+  paymentStatus     String   @default("paid") // paid | pending | failed | refunded
+  settlementStatus  String   @default("unsettled") // unsettled | requested | settled
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  settlementId      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Settlement {
+  id          String   @id @default(cuid())
+  centreId    String
+  centre      StudyCentre @relation(fields: [centreId], references: [id], onDelete: Cascade)
+  amount      Int
+  status      String   @default("requested") // requested | approved | rejected | paid
+  reference   String?
+  proofPath   String?
+  note        String?
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+}

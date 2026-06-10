@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.env
+.env.production
+.env.local
+*.log
+/prisma/*.db
+/prisma/*.db-journal
+dev.db
+uploads/
+_refs
+next-env.d.ts
