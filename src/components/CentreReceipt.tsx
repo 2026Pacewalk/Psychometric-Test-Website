@@ -13,7 +13,11 @@ export interface ReceiptData {
   approvedBy: string;
 }
 
-export default function CentreReceipt({ data, backHref }: { data: ReceiptData; backHref?: string }) {
+export default function CentreReceipt({
+  data, backHref, heading = "JOINING FEE RECEIPT", nameLabel = "Study Centre Name", codeLabel = "Centre Code",
+}: {
+  data: ReceiptData; backHref?: string; heading?: string; nameLabel?: string; codeLabel?: string;
+}) {
   return (
     <div className="min-h-screen bg-slate-100 py-6 print:bg-white print:py-0">
       <div className="no-print container-page mb-4 flex items-center justify-between">
@@ -30,7 +34,7 @@ export default function CentreReceipt({ data, backHref }: { data: ReceiptData; b
             <p className="text-xs text-slate-500">DARPAN ID: {ORG.darpanId} · Reg. No: {ORG.registrationNo}</p>
           </div>
           <div className="text-right">
-            <span className="rounded-lg bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700">JOINING FEE RECEIPT</span>
+            <span className="rounded-lg bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700">{heading}</span>
           </div>
         </div>
 
@@ -44,8 +48,8 @@ export default function CentreReceipt({ data, backHref }: { data: ReceiptData; b
         <table className="mt-6 w-full text-sm">
           <tbody>
             {([
-              ["Study Centre Name", data.centreName],
-              ["Centre Code", data.code],
+              [nameLabel, data.centreName],
+              [codeLabel, data.code],
               ["Owner Name", data.ownerName || "—"],
               ["Payment Mode", data.mode.toUpperCase()],
               ["Transaction / Cash Receipt No.", data.reference || "—"],

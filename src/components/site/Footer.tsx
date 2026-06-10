@@ -3,7 +3,7 @@ import { SITE_NAME, NAV_LINKS, ORG } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-slate-200 bg-slate-900 text-slate-300">
+    <footer className="mt-20 border-t border-slate-200 bg-slate-900 text-slate-300 print:hidden">
       <div className="container-page grid grid-cols-1 gap-8 py-12 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2">

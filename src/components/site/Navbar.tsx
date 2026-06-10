@@ -11,7 +11,7 @@ export default function Navbar() {
   const [loginOpen, setLoginOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40">
+    <header className="sticky top-0 z-40 print:hidden">
       {/* Tricolour accent strip */}
       <div className="h-1 w-full bg-gradient-to-r from-orange-500 via-white to-green-600" />
 

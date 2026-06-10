@@ -13,6 +13,7 @@ const ALL_NAV: (NavItem & { perm?: Permission })[] = [
   { label: "Individual Users", href: "/admin/individuals", icon: "👤", perm: "individuals" },
   { label: "Students", href: "/admin/students", icon: "👥", perm: "students" },
   { label: "Results & Reports", href: "/admin/results", icon: "📄", perm: "results" },
+  { label: "Payment Verification", href: "/admin/payment-verification", icon: "🔎", perm: "payments" },
   { label: "Payments", href: "/admin/payments", icon: "💳", perm: "payments" },
   { label: "Pricing", href: "/admin/pricing", icon: "💰", perm: "pricing" },
   { label: "Questions & Scoring", href: "/admin/questions", icon: "❓", perm: "questions" },

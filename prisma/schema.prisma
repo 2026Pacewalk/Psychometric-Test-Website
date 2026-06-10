@@ -212,22 +212,29 @@ model Report {
 }
 
 // ----------------------------------------------------------------------------
-// Payments (Razorpay — individual users only)
+// Payments (individual users) — Razorpay / QR-UPI / Cash, admin-verifiable
 // ----------------------------------------------------------------------------
 model Payment {
-  id               String   @id @default(cuid())
-  individualUserId String
-  individualUser   IndividualUser @relation(fields: [individualUserId], references: [id], onDelete: Cascade)
-  sessionId        String?  @unique
-  session          TestSession? @relation(fields: [sessionId], references: [id])
-  testType         String
-  amount           Int      // in INR rupees
-  currency         String   @default("INR")
-  razorpayOrderId  String   @unique
+  id                String   @id @default(cuid())
+  individualUserId  String
+  individualUser    IndividualUser @relation(fields: [individualUserId], references: [id], onDelete: Cascade)
+  sessionId         String?  @unique
+  session           TestSession? @relation(fields: [sessionId], references: [id])
+  testType          String
+  amount            Int      // in INR rupees
+  currency          String   @default("INR")
+  mode              String   @default("razorpay") // razorpay | qr | cash
+  reference         String?  // UTR / transaction id
+  proofPath         String?  // uploaded screenshot
+  remarks           String?
+  receiptNo         String?
+  approvedBy        String?
+  approvedAt        DateTime?
+  razorpayOrderId   String?  @unique
   razorpayPaymentId String?
-  status           String   @default("created") // created | paid | failed
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  status            String   @default("created") // created | pending | paid | failed | rejected
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 // ----------------------------------------------------------------------------
