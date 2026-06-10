@@ -6,8 +6,9 @@ export async function POST(req: NextRequest) {
   const b = await req.json().catch(() => ({}));
   const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
   const name = str(b.name);
-  const allowed = ["enroll", "contact", "company", "individual"];
+  const allowed = ["enroll", "school", "contact", "company", "centre", "individual", "demo", "callback"];
   const type = allowed.includes(b.type) ? b.type : "contact";
+  const source = str(b.source) || "website";
 
   if (!name) return NextResponse.json({ error: "Name is required." }, { status: 400 });
   if (!str(b.phone) && !str(b.email))
@@ -16,11 +17,13 @@ export async function POST(req: NextRequest) {
   await prisma.lead.create({
     data: {
       type,
+      source,
       name,
       email: str(b.email) || null,
       phone: str(b.phone) || null,
       school: str(b.school) || null,
       city: str(b.city) || null,
+      state: str(b.state) || null,
       message: str(b.message) || null,
     },
   });

@@ -19,6 +19,7 @@ const ALL_NAV: (NavItem & { perm?: Permission })[] = [
   { label: "Career Suggestions", href: "/admin/careers", icon: "🎯", perm: "careers" },
   { label: "Website Content", href: "/admin/content", icon: "📝", perm: "content" },
   { label: "Leads & Inquiries", href: "/admin/leads", icon: "📥", perm: "leads" },
+  { label: "Audit Trail", href: "/admin/audit", icon: "📜", perm: "audit" },
   { label: "Admin Users", href: "/admin/admins", icon: "🛡", perm: "admins" },
 ];
 

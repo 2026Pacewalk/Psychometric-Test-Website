@@ -246,18 +246,38 @@ model Pricing {
 // Lead management (enrollment + contact inquiries)
 // ----------------------------------------------------------------------------
 model Lead {
+  id            String   @id @default(cuid())
+  type          String   @default("enroll") // school | company | centre | individual | contact | demo | callback | enroll
+  source        String   @default("website")
+  name          String
+  email         String?
+  phone         String?
+  school        String?  // org / institute name
+  city          String?
+  state         String?
+  message       String?
+  status        String   @default("new") // new | contacted | followup | interested | converted | rejected | closed
+  assignedTo    String?
+  notes         String   @default("[]") // JSON array of { at, by, text }
+  convertedType String?
+  convertedId   String?
+  read          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Immutable activity log — never deleted.
+model AuditLog {
   id        String   @id @default(cuid())
-  type      String   @default("enroll") // enroll | contact | company | individual
-  name      String
-  email     String?
-  phone     String?
-  school    String?
-  city      String?
-  message   String?
-  status    String   @default("new")
-  read      Boolean  @default(false)
+  actorRole String?
+  actorId   String?
+  actorName String?
+  action    String
+  entity    String?
+  entityId  String?
+  details   String?  // JSON { prev, next, note }
+  ip        String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 // ----------------------------------------------------------------------------

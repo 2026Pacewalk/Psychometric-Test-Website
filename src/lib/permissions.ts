@@ -15,6 +15,7 @@ export const PERMISSIONS = [
   "payments",
   "pricing",
   "leads",
+  "audit",
   "admins",
 ] as const;
 
@@ -34,6 +35,7 @@ export const PERMISSION_LABELS: Record<Permission, string> = {
   payments: "Manage Payments",
   pricing: "Manage Pricing",
   leads: "Manage Leads & Inquiries",
+  audit: "View Audit Trail",
   admins: "Manage Admin Users",
 };
 
