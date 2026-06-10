@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { RIASEC, RIASEC_CONTENT } from "../src/lib/skills";
 import { STUDENT_QUESTION_MAP } from "../src/lib/mi";
+import { EMAIL_TEMPLATES } from "../src/lib/email-templates";
 
 const prisma = new PrismaClient();
 
@@ -234,6 +235,15 @@ async function main() {
   ];
   for (const [key, value] of SETTINGS) {
     await prisma.setting.upsert({ where: { key }, update: {}, create: { key, value } });
+  }
+
+  // Email templates
+  for (const t of EMAIL_TEMPLATES) {
+    await prisma.emailTemplate.upsert({
+      where: { key: t.key },
+      update: {},
+      create: { key: t.key, category: t.category, subject: t.subject, body: t.body },
+    });
   }
 
   const existing = await prisma.student.findFirst({ where: { schoolId: school.id, name: "Manav" } });

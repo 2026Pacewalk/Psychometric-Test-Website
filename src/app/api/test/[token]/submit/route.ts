@@ -77,5 +77,20 @@ export async function POST(
     }),
   ]);
 
+  // Notify the owning organisation that the test is completed / report is ready.
+  try {
+    const { notifyUser } = await import("@/lib/notify");
+    const takerName = session.takerName || "A candidate";
+    if (session.studyCentreId) {
+      await notifyUser("centre", session.studyCentreId, "test_completed", "Test completed — report ready", takerName, `/report/${session.token}`);
+    } else if (session.studentId) {
+      const st = await prisma.student.findUnique({ where: { id: session.studentId }, select: { name: true, schoolId: true } });
+      if (st) await notifyUser("school", st.schoolId, "test_completed", "Student test completed", st.name, `/report/${session.token}`);
+    } else if (session.employeeId) {
+      const em = await prisma.employee.findUnique({ where: { id: session.employeeId }, select: { name: true, companyId: true } });
+      if (em) await notifyUser("company", em.companyId, "test_completed", "Employee assessment completed", em.name, `/report/${session.token}`);
+    }
+  } catch { /* ignore */ }
+
   return NextResponse.json({ ok: true });
 }

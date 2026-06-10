@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LogoutButton from "@/components/LogoutButton";
+import NotificationBell from "@/components/dashboard/NotificationBell";
 
 export interface NavItem {
   label: string;
@@ -17,6 +18,7 @@ export default function Shell({
   nav,
   userName,
   accent = "brand",
+  notifAllHref,
   children,
 }: {
   brand: string;
@@ -24,6 +26,7 @@ export default function Shell({
   nav: NavItem[];
   userName: string;
   accent?: "brand" | "dark";
+  notifAllHref?: string;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -91,9 +94,10 @@ export default function Shell({
             ☰
           </button>
           <div className="flex flex-1 items-center justify-end gap-3">
-            <Link href="/" className="text-sm text-slate-500 hover:text-brand-600">
+            <Link href="/" className="hidden text-sm text-slate-500 hover:text-brand-600 sm:inline">
               View site
             </Link>
+            <NotificationBell allHref={notifAllHref} />
             <div className="flex items-center gap-2">
               <span className="hidden text-sm font-medium text-slate-700 sm:inline">{userName}</span>
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">

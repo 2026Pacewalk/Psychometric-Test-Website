@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { createSession } from "@/lib/auth";
+import { notifyAdmin } from "@/lib/notify";
 
 async function uniqueCode(): Promise<string> {
   for (let i = 0; i < 10; i++) {
@@ -67,6 +68,8 @@ export async function POST(req: NextRequest) {
   await prisma.lead.create({
     data: { type: "centre", name, email, phone: mobile, city: str("city"), message: `Study Centre signup — ${str("existingInstitute") || name} (payment pending)` },
   });
+
+  await notifyAdmin("centre_application", "New Study Centre application", `${name} (${centre.code})`, "/admin/centres");
 
   // Auto-login so the centre can pay from the dashboard.
   await createSession({ sub: centre.id, role: "centre", name: centre.name, email: centre.email });

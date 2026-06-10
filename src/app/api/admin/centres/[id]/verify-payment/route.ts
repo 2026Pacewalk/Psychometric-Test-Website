@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { guardAdmin } from "@/lib/api-guard";
+import { notifyUser } from "@/lib/notify";
 
 function receiptNo(seq: number) {
   const year = new Date().getFullYear();
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       prisma.joiningFeePayment.update({ where: { centreId: centre.id }, data: { status: "rejected", remarks, approvedBy: g.session.name, approvedAt: new Date() } }),
       prisma.studyCentre.update({ where: { id: centre.id }, data: { status: "rejected" } }),
     ]);
+    await notifyUser("centre", centre.id, "payment_rejected", "Joining fee payment rejected", remarks || "Please contact the administrator.", "/centre/billing");
     return NextResponse.json({ ok: true });
   }
 
@@ -49,5 +51,6 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     prisma.studyCentre.update({ where: { id: centre.id }, data: centreData }),
   ]);
 
+  await notifyUser("centre", centre.id, "payment_verified", "Joining fee approved — account active", `Receipt ${rn}`, "/centre/receipt");
   return NextResponse.json({ ok: true, receiptNo: rn });
 }

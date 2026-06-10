@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { guardAdmin } from "@/lib/api-guard";
+import { notifyUser } from "@/lib/notify";
 
 const STATUSES = ["requested", "approved", "rejected", "paid"];
 
@@ -34,5 +35,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }));
   }
   await prisma.$transaction(ops);
+
+  if (status === "paid")
+    await notifyUser("centre", settlement.centreId, "settlement_approved", "Settlement processed", `₹${settlement.amount}${data.reference ? " · Ref " + data.reference : ""}`, "/centre/wallet");
+  else if (status === "rejected")
+    await notifyUser("centre", settlement.centreId, "settlement_rejected", "Settlement request rejected", "Please contact the administrator.", "/centre/wallet");
+
   return NextResponse.json({ ok: true });
 }

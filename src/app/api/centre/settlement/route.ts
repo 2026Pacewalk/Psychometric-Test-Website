@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { notifyAdmin } from "@/lib/notify";
 
 // Centre requests settlement of its pending (online, paid, unsettled) earnings.
 export async function POST() {
@@ -23,5 +24,6 @@ export async function POST() {
     data: { settlementStatus: "requested", settlementId: settlement.id },
   });
 
+  await notifyAdmin("settlement", "Settlement requested", `${session.name} — ₹${amount}`, "/admin/settlements");
   return NextResponse.json({ ok: true, amount });
 }

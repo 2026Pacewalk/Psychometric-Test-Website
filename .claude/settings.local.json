@@ -38,7 +38,10 @@
       "Bash(file /tmp/qrf.png)",
       "Bash(curl -s -o /dev/null -w \"site %{http_code}\\\\n\" http://localhost:9090/become-study-centre)",
       "Bash(curl -s http://localhost:9090/report/__TRACKED_VAR__?lang=both)",
-      "Bash(gh repo *)"
+      "Bash(gh repo *)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(\"node stopped\")"
     ]
   }
 }

@@ -4,6 +4,7 @@ import path from "path";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
+import { notifyAdmin } from "@/lib/notify";
 
 // Logged-in centre submits its joining-fee payment (cash or UPI) for verification.
 export async function POST(req: NextRequest) {
@@ -50,5 +51,6 @@ export async function POST(req: NextRequest) {
   });
   await prisma.studyCentre.update({ where: { id: session.sub }, data: { status: "payment_verification" } });
 
+  await notifyAdmin("payment", "Joining fee payment submitted", `${session.name} (${mode.toUpperCase()})`, "/admin/centres");
   return NextResponse.json({ ok: true });
 }

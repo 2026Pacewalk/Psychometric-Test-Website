@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { guardAdmin } from "@/lib/api-guard";
 import { logAudit, clientIp } from "@/lib/audit";
+import { notifyAdmin } from "@/lib/notify";
 import { ConvertTarget, LOGIN_URL, nextCode, tempPassword } from "@/lib/convert";
 
 const TARGETS = ["school", "company", "centre", "individual"];
@@ -74,6 +75,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     details: { target, createdId, username: loginUsername, leadName: lead.name },
     ip: clientIp(req),
   });
+
+  await notifyAdmin("lead_converted", `Lead converted to ${target}`, `${name} (${loginUsername})`, "/admin/leads");
 
   return NextResponse.json({
     ok: true, role: target, username: loginUsername, password, loginUrl: LOGIN_URL[target],

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { notifyAdmin } from "@/lib/notify";
 
 // Public endpoint: enrollment + contact form submissions.
 export async function POST(req: NextRequest) {
@@ -28,5 +29,6 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  await notifyAdmin("new_lead", `New lead: ${name}`, `${type} inquiry${str(b.city) ? " · " + str(b.city) : ""}`, "/admin/leads");
   return NextResponse.json({ ok: true });
 }

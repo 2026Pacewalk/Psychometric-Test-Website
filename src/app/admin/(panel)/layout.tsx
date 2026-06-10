@@ -18,6 +18,7 @@ const ALL_NAV: (NavItem & { perm?: Permission })[] = [
   { label: "Questions & Scoring", href: "/admin/questions", icon: "❓", perm: "questions" },
   { label: "Career Suggestions", href: "/admin/careers", icon: "🎯", perm: "careers" },
   { label: "Website Content", href: "/admin/content", icon: "📝", perm: "content" },
+  { label: "Email Templates", href: "/admin/email-templates", icon: "✉", perm: "content" },
   { label: "Leads & Inquiries", href: "/admin/leads", icon: "📥", perm: "leads" },
   { label: "Audit Trail", href: "/admin/audit", icon: "📜", perm: "audit" },
   { label: "Admin Users", href: "/admin/admins", icon: "🛡", perm: "admins" },
@@ -32,7 +33,7 @@ export default async function AdminPanelLayout({
   const nav = ALL_NAV.filter((n) => !n.perm || permissions.includes(n.perm));
 
   return (
-    <Shell brand="Super Admin" subtitle="Control Center" nav={nav} userName={session.name} accent="dark">
+    <Shell brand="Super Admin" subtitle="Control Center" nav={nav} userName={session.name} accent="dark" notifAllHref="/admin/notifications">
       {children}
     </Shell>
   );

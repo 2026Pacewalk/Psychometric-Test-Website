@@ -266,6 +266,31 @@ model Lead {
   updatedAt     DateTime @updatedAt
 }
 
+// Dashboard notifications (role-scoped; recipientId null = all of that role)
+model Notification {
+  id            String   @id @default(cuid())
+  recipientRole String   // admin | school | company | centre | individual
+  recipientId   String?
+  type          String
+  title         String
+  body          String?
+  link          String?
+  read          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([recipientRole, recipientId, read])
+}
+
+// Editable email templates (rendered with {placeholders}; SMTP wired later)
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  category  String
+  subject   String
+  body      String
+  updatedAt DateTime @updatedAt
+}
+
 // Immutable activity log — never deleted.
 model AuditLog {
   id        String   @id @default(cuid())
