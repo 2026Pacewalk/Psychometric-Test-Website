@@ -1,6 +1,5 @@
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
-import WhatsAppButton from "@/components/site/WhatsAppButton";
 import MobileBottomNav, { BNItem } from "@/components/site/MobileBottomNav";
 import { getSession } from "@/lib/auth";
 
@@ -32,7 +31,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <div className="hidden lg:block">
         <Footer />
       </div>
-      <WhatsAppButton />
       <MobileBottomNav items={items} />
     </div>
   );
