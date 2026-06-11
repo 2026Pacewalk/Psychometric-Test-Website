@@ -47,9 +47,7 @@ export default function Shell({
         }`}
       >
         <div className="flex h-16 items-center gap-2 px-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 font-extrabold text-white">
-            {brand.charAt(0)}
-          </div>
+          <img src="/logo.png" alt={brand} className="h-9 w-9 rounded-xl bg-white object-contain p-0.5" />
           <div>
             <p className={`text-sm font-bold ${accent === "dark" ? "text-white" : "text-slate-900"}`}>
               {brand}

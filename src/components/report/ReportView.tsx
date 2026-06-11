@@ -19,21 +19,7 @@ import {
 import ReportToolbar from "./ReportToolbar";
 import { ReportLang, pick, ui, SKILL_DEF_PA, CATEGORY_PA } from "@/lib/i18n";
 
-interface Student {
-  name: string;
-  fatherName: string | null;
-  motherName: string | null;
-  mobile: string | null;
-  otherMobile: string | null;
-  dob: string | null;
-  classCourse: string | null;
-  qualification: string | null;
-  schoolName: string | null;
-  address: string | null;
-  category: string | null;
-  aim: string | null;
-  venue: string | null;
-}
+type ProfileRow = [string, string | null | undefined];
 
 function StatusBadge({ status, lang }: { status: StatusKey; lang: ReportLang }) {
   return (
@@ -48,12 +34,14 @@ const operator = "AMG Educational Charitable Society";
 
 export default function ReportView({
   data,
-  student,
+  name,
+  profile,
   completedAt,
   lang = "both",
 }: {
   data: ReportData;
-  student: Student;
+  name: string;
+  profile: ProfileRow[];
   completedAt: string;
   lang?: ReportLang;
 }) {
@@ -68,20 +56,7 @@ export default function ReportView({
   // Paired categories that map to per-skill detail sections (first 6).
   const pairedCategories = CATEGORIES.slice(0, 6);
 
-  const profileRows: [string, string | null | undefined][] = [
-    ["fatherName", student.fatherName],
-    ["motherName", student.motherName],
-    ["mobile", student.mobile],
-    ["otherMobile", student.otherMobile],
-    ["dob", student.dob],
-    ["classCourse", student.classCourse],
-    ["qualification", student.qualification],
-    ["category", student.category],
-    ["school", student.schoolName],
-    ["aim", student.aim],
-    ["venue", student.venue],
-    ["address", student.address],
-  ];
+  const profileRows: ProfileRow[] = profile;
 
   return (
     <div className="min-h-screen bg-slate-100 py-6 print:bg-white print:py-0">
@@ -93,7 +68,7 @@ export default function ReportView({
           <p className="text-sm font-semibold uppercase tracking-widest text-brand-200">
             {siteName} · Psychometric Assessment
           </p>
-          <h1 className="mt-3 text-4xl font-extrabold">{student.name}</h1>
+          <h1 className="mt-3 text-4xl font-extrabold">{name}</h1>
           <p className="mt-1 text-brand-100">
             12 Core Life Skills · RIASEC Career Profile · Personalised Report
           </p>
@@ -113,11 +88,11 @@ export default function ReportView({
           </div>
         </div>
 
-        <h2 className="mt-8 text-lg font-bold text-slate-900">{t("studentProfile")}</h2>
+        <h2 className="mt-8 text-lg font-bold text-slate-900">{pick("Profile", "ਪ੍ਰੋਫਾਈਲ", lang)}</h2>
         <div className="mt-3 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
-          {profileRows.map(([k, v]) => (
-            <div key={k} className="flex justify-between border-b border-slate-100 py-2 text-sm">
-              <span className="font-medium text-slate-500">{t(k)}</span>
+          {profileRows.map(([label, v]) => (
+            <div key={label} className="flex justify-between border-b border-slate-100 py-2 text-sm">
+              <span className="font-medium text-slate-500">{label}</span>
               <span className="text-right text-slate-800">{v || "—"}</span>
             </div>
           ))}

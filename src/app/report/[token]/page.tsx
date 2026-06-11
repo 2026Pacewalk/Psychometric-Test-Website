@@ -9,6 +9,8 @@ import MIReportView from "@/components/report/MIReportView";
 
 export const dynamic = "force-dynamic";
 
+export type ProfileRow = [string, string | null | undefined];
+
 async function resolveLang(searchParams: { lang?: string }): Promise<ReportLang> {
   if (searchParams.lang) return normalizeLang(searchParams.lang);
   const s = await getSession();
@@ -39,6 +41,7 @@ export default async function ReportPage({
       student: { include: { school: true } },
       employee: { include: { company: true } },
       individualUser: true,
+      studyCentre: true,
       report: true,
     },
   });
@@ -46,54 +49,76 @@ export default async function ReportPage({
   if (!session || !session.report) notFound();
 
   const completedAt = session.completedAt?.toISOString() || new Date(0).toISOString();
+  const date = new Date(completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const testTypeLabel = session.testType === "student" ? "Multiple Intelligence (Class 9–10)" : "Employee / Self Assessment";
 
-  // Student MI report
-  if (session.report.kind === "student_mi") {
-    const data = JSON.parse(session.report.data) as MIReportData;
-    const s = session.student;
-    return (
-      <MIReportView
-        data={data}
-        lang={lang}
-        completedAt={completedAt}
-        taker={{
-          name: s?.name || session.takerName || "Student",
-          dob: s?.dob,
-          email: s?.email || session.individualUser?.email,
-          mobile: s?.mobile,
-          address: s?.address,
-          city: session.individualUser?.city || null,
-          classCourse: s?.classCourse,
-          schoolName: s?.schoolNameRaw || s?.school.name,
-        }}
-      />
-    );
-  }
-
-  // Employee / skills report
-  const data = JSON.parse(session.report.data) as ReportData;
+  // ---- Build name + profile block dynamically by audience (never hardcoded) ----
   const s = session.student;
   const e = session.employee;
-  return (
-    <ReportView
-      data={data}
-      lang={lang}
-      completedAt={completedAt}
-      student={{
-        name: s?.name || e?.name || session.takerName || "Candidate",
-        fatherName: s?.fatherName || null,
-        motherName: s?.motherName || null,
-        mobile: s?.mobile || e?.mobile || null,
-        otherMobile: s?.otherMobile || null,
-        dob: s?.dob || e?.dob || null,
-        classCourse: s?.classCourse || e?.designation || null,
-        qualification: s?.qualification || e?.department || null,
-        schoolName: s?.schoolNameRaw || s?.school.name || e?.company.name || null,
-        address: s?.address || e?.address || null,
-        category: s?.category || null,
-        aim: s?.aim || null,
-        venue: s?.venue || null,
-      }}
-    />
-  );
+  const iu = session.individualUser;
+  const sc = session.studyCentre;
+  let name = session.takerName || "Candidate";
+  let profile: ProfileRow[] = [];
+
+  if (session.audience === "company" && e) {
+    name = e.name;
+    profile = [
+      ["Company Name", e.company.name],
+      ["Designation", e.designation],
+      ["Department", e.department],
+      ["Employee ID", e.id.slice(-6).toUpperCase()],
+      ["Mobile", e.mobile],
+      ["Email", e.email],
+      ["Date of Birth", e.dob],
+      ["Work Location", e.address || e.company.city],
+      ["Assessment Type", testTypeLabel],
+      ["Report Date", date],
+    ];
+  } else if (session.audience === "individual") {
+    name = iu?.name || session.takerName || "Candidate";
+    profile = [
+      ["Mobile", iu?.phone],
+      ["Email", iu?.email],
+      ["City", iu?.city],
+      ["Date of Birth", iu?.dob],
+      ["Assessment Type", testTypeLabel],
+      ["Report Date", date],
+    ];
+  } else if (session.audience === "centre") {
+    name = session.takerName || "Candidate";
+    profile = [
+      ["Study Centre Name", sc?.name],
+      ["Candidate Name", name],
+      ["Assessment Type", testTypeLabel],
+      ["Mobile", sc?.mobile],
+      ["City", sc?.city],
+      ["Report Date", date],
+    ];
+  } else if (s) {
+    // School student
+    name = s.name;
+    profile = [
+      ["School Name", s.schoolNameRaw || s.school.name],
+      ["Class / Course", s.classCourse],
+      ["Father Name", s.fatherName],
+      ["Mother Name", s.motherName],
+      ["Mobile", s.mobile],
+      ["Date of Birth", s.dob],
+      ["Category", s.category],
+      ["Aim / Goal", s.aim],
+      ["Address", s.address],
+      ["Venue", s.venue],
+      ["Report Date", date],
+    ];
+  } else {
+    profile = [["Assessment Type", testTypeLabel], ["Report Date", date]];
+  }
+
+  if (session.report.kind === "student_mi") {
+    const data = JSON.parse(session.report.data) as MIReportData;
+    return <MIReportView data={data} lang={lang} completedAt={completedAt} name={name} profile={profile} />;
+  }
+
+  const data = JSON.parse(session.report.data) as ReportData;
+  return <ReportView data={data} lang={lang} completedAt={completedAt} name={name} profile={profile} />;
 }

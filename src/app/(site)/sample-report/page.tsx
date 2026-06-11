@@ -51,21 +51,19 @@ export default async function SampleReportPage() {
       <ReportView
         data={data}
         completedAt={data.generatedAt}
-        student={{
-          name: "Sample Student",
-          fatherName: "—",
-          motherName: "—",
-          mobile: "—",
-          otherMobile: "—",
-          dob: "01/01/2008",
-          classCourse: "10th",
-          qualification: "Secondary",
-          schoolName: "Demonstration School",
-          address: "Punjab, India",
-          category: "GEN",
-          aim: "Engineer",
-          venue: "School Campus",
-        }}
+        name="Sample Student"
+        profile={[
+          ["School Name", "Demonstration School"],
+          ["Class / Course", "10th"],
+          ["Father Name", "—"],
+          ["Mother Name", "—"],
+          ["Mobile", "—"],
+          ["Date of Birth", "01/01/2008"],
+          ["Category", "GEN"],
+          ["Aim / Goal", "Engineer"],
+          ["Address", "Punjab, India"],
+          ["Venue", "School Campus"],
+        ]}
       />
     </>
   );

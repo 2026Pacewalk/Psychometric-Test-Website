@@ -7,9 +7,7 @@ export default function Footer() {
       <div className="container-page grid grid-cols-1 gap-8 py-12 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 font-extrabold text-white">
-              {SITE_NAME.charAt(0)}
-            </span>
+            <img src="/logo.png" alt={SITE_NAME} className="h-9 w-9 rounded-lg bg-white object-contain p-0.5" />
             <span className="text-lg font-extrabold text-white">{SITE_NAME}</span>
           </div>
           <p className="mt-3 text-sm text-slate-400">

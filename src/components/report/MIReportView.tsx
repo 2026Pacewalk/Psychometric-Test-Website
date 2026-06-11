@@ -11,16 +11,12 @@ import {
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "TestPsychometric";
 const operator = "AMG Educational Charitable Society";
 
-interface Taker {
-  name: string; dob?: string | null; email?: string | null; mobile?: string | null;
-  address?: string | null; city?: string | null; classCourse?: string | null;
-  schoolName?: string | null;
-}
+type ProfileRow = [string, string | null | undefined];
 
 export default function MIReportView({
-  data, taker, completedAt, lang = "both",
+  data, name, profile, completedAt, lang = "both",
 }: {
-  data: MIReportData; taker: Taker; completedAt: string; lang?: ReportLang;
+  data: MIReportData; name: string; profile: ProfileRow[]; completedAt: string; lang?: ReportLang;
 }) {
   const date = new Date(completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   const rec = studentRecommendation(data);
@@ -28,10 +24,7 @@ export default function MIReportView({
 
   // Page text is authored once as a function of a single language `l`;
   // in bilingual mode each page renders English (left) and Punjabi (right).
-  const profileRows: [string, string | null | undefined][] = [
-    ["name", taker.name], ["dob", taker.dob], ["email", taker.email], ["contact", taker.mobile],
-    ["classCourse", taker.classCourse], ["school", taker.schoolName], ["city", taker.city], ["address", taker.address],
-  ];
+  const profileRows: ProfileRow[] = [["Name", name], ...profile];
 
   const cover = (l: ReportLang) => (
     <>
@@ -42,9 +35,9 @@ export default function MIReportView({
       </div>
       <h2 className="mt-5 text-base font-bold text-slate-900">{ui("welcome", l)}</h2>
       <div className="mt-2">
-        {profileRows.map(([k, v]) => (
-          <div key={k} className="flex justify-between border-b border-slate-100 py-1.5 text-sm">
-            <span className="font-medium text-slate-500">{ui(k, l)}</span>
+        {profileRows.map(([label, v]) => (
+          <div key={label} className="flex justify-between border-b border-slate-100 py-1.5 text-sm">
+            <span className="font-medium text-slate-500">{label}</span>
             <span className="text-right text-slate-800">{v || "—"}</span>
           </div>
         ))}
@@ -175,7 +168,7 @@ export default function MIReportView({
   const counsellorText = (l: ReportLang) => (
     <>
       <h2 className="h-section mb-2 text-xl">{ui("counsellor", l)}</h2>
-      <p className="text-sm text-slate-700">{pick("Dear", "ਪਿਆਰੇ", l)} {taker.name},</p>
+      <p className="text-sm text-slate-700">{pick("Dear", "ਪਿਆਰੇ", l)} {name},</p>
       <p className="mt-1 text-sm font-semibold text-blue-800">{ui("congratulations", l)}</p>
       <p className="mt-1 text-xs leading-relaxed text-slate-600">
         {pick("You have successfully completed the Psychometric Test.", "ਤੁਸੀਂ ਮਨੋਮਾਪ ਟੈਸਟ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਕੀਤਾ ਹੈ।", l)} {rec.summary}

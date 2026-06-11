@@ -31,9 +31,7 @@ export default function Navbar() {
       <div className="border-b border-slate-200 bg-white/95 backdrop-blur">
         <nav className="container-page flex h-16 items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-700 text-lg font-extrabold text-white">
-              {SITE_NAME.charAt(0)}
-            </span>
+            <img src="/logo.png" alt={SITE_NAME} className="h-10 w-10 rounded-lg object-contain" />
             <span>
               <span className="block text-lg font-extrabold leading-tight text-slate-900">{SITE_NAME}</span>
               <span className="block text-[11px] font-medium leading-tight text-slate-500">An initiative of {ORG.operator}</span>
