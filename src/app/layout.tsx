@@ -36,7 +36,6 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, statusBarStyle: "default", title: siteName },
   icons: {
     icon: [
-      { url: "/logo.svg", type: "image/svg+xml" },
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
       { url: "/logo.png", sizes: "512x512", type: "image/png" },
     ],

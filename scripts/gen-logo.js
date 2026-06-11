@@ -2,8 +2,15 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
-const pub = path.join(__dirname, "..", "public");
-const svg = fs.readFileSync(path.join(pub, "logo.svg"));
+const root = path.join(__dirname, "..");
+const pub = path.join(root, "public");
+
+// Source = the real brand logo placed at the project root.
+const src = path.join(root, "logo.png");
+if (!fs.existsSync(src)) {
+  console.error("Source logo missing:", src);
+  process.exit(1);
+}
 
 const targets = [
   { file: "logo.png", size: 512 },
@@ -15,8 +22,8 @@ const targets = [
 
 (async () => {
   for (const t of targets) {
-    await sharp(svg, { density: 384 })
-      .resize(t.size, t.size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    await sharp(src)
+      .resize(t.size, t.size, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 0 } })
       .png()
       .toFile(path.join(pub, t.file));
     console.log("wrote", t.file, t.size + "px");
