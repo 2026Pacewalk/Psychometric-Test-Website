@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Gurmukhi } from "next/font/google";
 import "./globals.css";
+import PWA from "@/components/PWA";
 
 // Self-hosted via next/font with unique internal family names — immune to any
 // broken/symbol font of the same name installed on a visitor's machine.
@@ -31,6 +32,19 @@ export const metadata: Metadata = {
     "AMG Educational Charitable Society",
     "Punjab",
   ],
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: siteName },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1d4ed8",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -40,7 +54,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fontSans.variable} ${fontPunjabi.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PWA />
+      </body>
     </html>
   );
 }
