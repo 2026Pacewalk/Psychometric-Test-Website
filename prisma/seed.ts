@@ -229,12 +229,17 @@ async function main() {
   // Joining-fee / payment settings
   const SETTINGS: [string, string][] = [
     ["joining_fee", "5000"],
-    ["upi_id", "amgeducations@upi"],
+    ["upi_id", "8254623@indianbk"],
     ["upi_name", "AMG Educational Charitable Society"],
     ["qr_image", ""],
   ];
   for (const [key, value] of SETTINGS) {
     await prisma.setting.upsert({ where: { key }, update: {}, create: { key, value } });
+  }
+  // One-time correction of the old placeholder UPI on existing installs.
+  const upiRow = await prisma.setting.findUnique({ where: { key: "upi_id" } });
+  if (upiRow && upiRow.value === "amgeducations@upi") {
+    await prisma.setting.update({ where: { key: "upi_id" }, data: { value: "8254623@indianbk" } });
   }
 
   // Email templates

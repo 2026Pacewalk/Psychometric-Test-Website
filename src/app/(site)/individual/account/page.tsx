@@ -42,7 +42,7 @@ export default async function AccountPage() {
       prices={prices}
       sessions={rows}
       razorpayActive={razorpayConfigured()}
-      pay={{ upiId: settings.upiId, upiName: settings.upiName, hasQr: !!settings.qrImage }}
+      pay={{ upiId: settings.upiId, upiName: settings.upiName, hasQr: true }}
     />
   );
 }

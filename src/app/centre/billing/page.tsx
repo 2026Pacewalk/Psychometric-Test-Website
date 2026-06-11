@@ -18,7 +18,7 @@ export default async function CentreBillingPage() {
     <BillingClient
       status={centre.status}
       commissionPercent={centre.commissionPercent}
-      settings={{ joiningFee: settings.joiningFee, upiId: settings.upiId, upiName: settings.upiName, hasQr: !!settings.qrImage }}
+      settings={{ joiningFee: settings.joiningFee, upiId: settings.upiId, upiName: settings.upiName, hasQr: true }}
       payment={p ? {
         amount: p.amount, mode: p.mode, status: p.status, reference: p.reference || "",
         paymentDate: p.paymentDate || "", hasProof: !!p.proofPath, receiptNo: p.receiptNo || "", remarks: p.remarks || "",
