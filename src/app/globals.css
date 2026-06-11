@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-punjabi: "Noto Sans Gurmukhi", "Raavi", "Nirmala UI", system-ui, sans-serif;
+  /* Fallbacks only — next/font sets --font-sans / --font-punjabi on <html> with
+     unique internal family names. We avoid a bare "Inter" here on purpose, since
+     some machines have a broken/symbol font named "Inter" installed locally. */
+  --font-sans: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --font-punjabi: "Noto Sans Gurmukhi", "Nirmala UI", "Raavi", system-ui, sans-serif;
 }
 
 html {

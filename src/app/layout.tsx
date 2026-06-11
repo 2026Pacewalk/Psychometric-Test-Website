@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
+import { Inter, Noto_Sans_Gurmukhi } from "next/font/google";
 import "./globals.css";
+
+// Self-hosted via next/font with unique internal family names — immune to any
+// broken/symbol font of the same name installed on a visitor's machine.
+const fontSans = Inter({ subsets: ["latin"], display: "swap", variable: "--font-sans" });
+const fontPunjabi = Noto_Sans_Gurmukhi({
+  subsets: ["gurmukhi"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-punjabi",
+});
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "TestPsychometric";
 
@@ -28,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${fontSans.variable} ${fontPunjabi.variable}`}>
       <body>{children}</body>
     </html>
   );
