@@ -2,10 +2,10 @@ import { requireSchool } from "@/lib/session-helpers";
 import Shell, { NavItem } from "@/components/dashboard/Shell";
 
 const NAV: NavItem[] = [
-  { label: "Overview", href: "/dashboard", icon: "▦" },
-  { label: "Students", href: "/dashboard/students", icon: "👥" },
-  { label: "Reports", href: "/dashboard/reports", icon: "📄" },
-  { label: "School Profile", href: "/dashboard/profile", icon: "🏫" },
+  { label: "Overview", href: "/dashboard", icon: "overview" },
+  { label: "Students", href: "/dashboard/students", icon: "users" },
+  { label: "Reports", href: "/dashboard/reports", icon: "report" },
+  { label: "School Profile", href: "/dashboard/profile", icon: "school" },
 ];
 
 export default async function DashboardLayout({

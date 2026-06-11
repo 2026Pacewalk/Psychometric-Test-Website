@@ -33,9 +33,9 @@ export default async function CompanyHome() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Total Employees" value={totalEmployees} icon="👥" tone="brand" />
-        <StatCard label="Tests Completed" value={completed} icon="✅" tone="green" />
-        <StatCard label="Pending Tests" value={pending} icon="⏳" tone="amber" />
+        <StatCard label="Total Employees" value={totalEmployees} icon="users" tone="brand" />
+        <StatCard label="Tests Completed" value={completed} icon="check" tone="green" />
+        <StatCard label="Pending Tests" value={pending} icon="pending" tone="amber" />
       </div>
 
       <div className="card p-6">

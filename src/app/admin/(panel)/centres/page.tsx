@@ -45,11 +45,11 @@ export default async function AdminCentresPage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard label="Total Centres" value={totalCentres} icon="🏬" tone="brand" />
-        <StatCard label="Active Centres" value={active} icon="✅" tone="green" />
-        <StatCard label="Centre Collections" value={`₹${collected}`} icon="💵" tone="brand" />
-        <StatCard label="AMG Share" value={`₹${amgShare}`} icon="🏛" tone="violet" />
-        <StatCard label="Offline Due to AMG" value={`₹${amgDue}`} icon="📌" tone="amber" />
+        <StatCard label="Total Centres" value={totalCentres} icon="centre" tone="brand" />
+        <StatCard label="Active Centres" value={active} icon="check" tone="green" />
+        <StatCard label="Centre Collections" value={`₹${collected}`} icon="cash" tone="brand" />
+        <StatCard label="AMG Share" value={`₹${amgShare}`} icon="bank" tone="violet" />
+        <StatCard label="Offline Due to AMG" value={`₹${amgDue}`} icon="pin" tone="amber" />
       </div>
       <CentresClient rows={rows} />
     </div>

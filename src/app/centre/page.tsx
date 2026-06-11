@@ -47,15 +47,15 @@ export default async function CentreHome() {
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Collected" value={`₹${w.totalCollected}`} icon="💵" tone="brand" />
-        <StatCard label="Your Earnings (Net)" value={`₹${w.centreShare}`} icon="💰" tone="green" />
-        <StatCard label="AMG Share" value={`₹${w.amgShare}`} icon="🏛" tone="violet" />
-        <StatCard label="Reports Generated" value={reports} icon="📄" tone="amber" />
+        <StatCard label="Total Collected" value={`₹${w.totalCollected}`} icon="cash" tone="brand" />
+        <StatCard label="Your Earnings (Net)" value={`₹${w.centreShare}`} icon="revenue" tone="green" />
+        <StatCard label="AMG Share" value={`₹${w.amgShare}`} icon="bank" tone="violet" />
+        <StatCard label="Reports Generated" value={reports} icon="report" tone="amber" />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Pending Settlement" value={`₹${w.pendingSettlement}`} icon="⏳" tone="amber" />
-        <StatCard label="Settled" value={`₹${w.settled}`} icon="✅" tone="green" />
-        <StatCard label="AMG Due (Offline)" value={`₹${w.amgDueFromCentre}`} icon="📌" tone="violet" />
+        <StatCard label="Pending Settlement" value={`₹${w.pendingSettlement}`} icon="pending" tone="amber" />
+        <StatCard label="Settled" value={`₹${w.settled}`} icon="check" tone="green" />
+        <StatCard label="AMG Due (Offline)" value={`₹${w.amgDueFromCentre}`} icon="pin" tone="violet" />
       </div>
 
       <div className="card p-6">

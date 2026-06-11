@@ -36,10 +36,10 @@ export default async function DashboardHome() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Students" value={totalStudents} icon="👥" tone="brand" />
-        <StatCard label="Tests Completed" value={completed} icon="✅" tone="green" />
-        <StatCard label="Pending Tests" value={pending} icon="⏳" tone="amber" />
-        <StatCard label="Reports Generated" value={reports} icon="📄" tone="violet" />
+        <StatCard label="Total Students" value={totalStudents} icon="users" tone="brand" />
+        <StatCard label="Tests Completed" value={completed} icon="check" tone="green" />
+        <StatCard label="Pending Tests" value={pending} icon="pending" tone="amber" />
+        <StatCard label="Reports Generated" value={reports} icon="report" tone="violet" />
       </div>
 
       <div className="card p-6">

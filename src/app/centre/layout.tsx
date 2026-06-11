@@ -12,16 +12,16 @@ export default async function CentreLayout({ children }: { children: React.React
 
   const nav: NavItem[] = active
     ? [
-        { label: "Overview", href: "/centre", icon: "▦" },
-        { label: "Conduct Test", href: "/centre/tests", icon: "📝" },
-        { label: "Wallet & Settlements", href: "/centre/wallet", icon: "👛" },
-        { label: "Billing & Payment", href: "/centre/billing", icon: "💳" },
-        { label: "Centre Profile", href: "/centre/profile", icon: "🏬" },
+        { label: "Overview", href: "/centre", icon: "overview" },
+        { label: "Conduct Test", href: "/centre/tests", icon: "test" },
+        { label: "Wallet & Settlements", href: "/centre/wallet", icon: "wallet" },
+        { label: "Billing & Payment", href: "/centre/billing", icon: "card" },
+        { label: "Centre Profile", href: "/centre/profile", icon: "centre" },
       ]
     : [
-        { label: "Overview", href: "/centre", icon: "▦" },
-        { label: "Joining Fee Payment", href: "/centre/billing", icon: "💳" },
-        { label: "Centre Profile", href: "/centre/profile", icon: "🏬" },
+        { label: "Overview", href: "/centre", icon: "overview" },
+        { label: "Joining Fee Payment", href: "/centre/billing", icon: "card" },
+        { label: "Centre Profile", href: "/centre/profile", icon: "centre" },
       ];
 
   return (

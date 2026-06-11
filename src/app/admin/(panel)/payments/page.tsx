@@ -28,9 +28,9 @@ export default async function PaymentsPage() {
       <div><h1 className="text-2xl font-extrabold text-slate-900">Payments</h1><p className="text-sm text-slate-500">Razorpay transactions from individual users.</p></div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Total Transactions" value={payments.length} icon="🧾" tone="brand" />
-        <StatCard label="Successful Payments" value={paid.length} icon="✅" tone="green" />
-        <StatCard label="Revenue Collected" value={`₹${revenue}`} icon="💰" tone="violet" />
+        <StatCard label="Total Transactions" value={payments.length} icon="receipt" tone="brand" />
+        <StatCard label="Successful Payments" value={paid.length} icon="check" tone="green" />
+        <StatCard label="Revenue Collected" value={`₹${revenue}`} icon="revenue" tone="violet" />
       </div>
 
       <div className="card overflow-x-auto p-4">

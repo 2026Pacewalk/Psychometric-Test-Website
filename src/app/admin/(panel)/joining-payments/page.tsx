@@ -29,9 +29,9 @@ export default async function JoiningPaymentsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Total Payments" value={payments.length} icon="🧾" tone="brand" />
-        <StatCard label="Awaiting Verification" value={pending} icon="⏳" tone="amber" />
-        <StatCard label="Fee Collected" value={`₹${collected}`} icon="💰" tone="green" />
+        <StatCard label="Total Payments" value={payments.length} icon="receipt" tone="brand" />
+        <StatCard label="Awaiting Verification" value={pending} icon="pending" tone="amber" />
+        <StatCard label="Fee Collected" value={`₹${collected}`} icon="revenue" tone="green" />
       </div>
 
       <div className="card overflow-x-auto p-4">

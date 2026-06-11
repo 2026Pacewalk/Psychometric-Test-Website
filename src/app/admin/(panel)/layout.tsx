@@ -3,26 +3,31 @@ import Shell, { NavItem } from "@/components/dashboard/Shell";
 import { Permission } from "@/lib/permissions";
 
 const ALL_NAV: (NavItem & { perm?: Permission })[] = [
-  { label: "Overview", href: "/admin", icon: "▦" },
-  { label: "Schools", href: "/admin/schools", icon: "🏫", perm: "schools" },
-  { label: "Companies", href: "/admin/companies", icon: "🏢", perm: "companies" },
-  { label: "Study Centres", href: "/admin/centres", icon: "🏬", perm: "centres" },
-  { label: "Joining Payments", href: "/admin/joining-payments", icon: "🧾", perm: "centres" },
-  { label: "Settlements", href: "/admin/settlements", icon: "🤝", perm: "centres" },
-  { label: "Payment Settings", href: "/admin/payment-settings", icon: "⚙", perm: "centres" },
-  { label: "Individual Users", href: "/admin/individuals", icon: "👤", perm: "individuals" },
-  { label: "Students", href: "/admin/students", icon: "👥", perm: "students" },
-  { label: "Results & Reports", href: "/admin/results", icon: "📄", perm: "results" },
-  { label: "Payment Verification", href: "/admin/payment-verification", icon: "🔎", perm: "payments" },
-  { label: "Payments", href: "/admin/payments", icon: "💳", perm: "payments" },
-  { label: "Pricing", href: "/admin/pricing", icon: "💰", perm: "pricing" },
-  { label: "Questions & Scoring", href: "/admin/questions", icon: "❓", perm: "questions" },
-  { label: "Career Suggestions", href: "/admin/careers", icon: "🎯", perm: "careers" },
-  { label: "Website Content", href: "/admin/content", icon: "📝", perm: "content" },
-  { label: "Email Templates", href: "/admin/email-templates", icon: "✉", perm: "content" },
-  { label: "Leads & Inquiries", href: "/admin/leads", icon: "📥", perm: "leads" },
-  { label: "Audit Trail", href: "/admin/audit", icon: "📜", perm: "audit" },
-  { label: "Admin Users", href: "/admin/admins", icon: "🛡", perm: "admins" },
+  { label: "Overview", href: "/admin", icon: "overview" },
+
+  { label: "Schools", href: "/admin/schools", icon: "school", perm: "schools", section: "Accounts" },
+  { label: "Companies", href: "/admin/companies", icon: "company", perm: "companies", section: "Accounts" },
+  { label: "Study Centres", href: "/admin/centres", icon: "centre", perm: "centres", section: "Accounts" },
+  { label: "Individual Users", href: "/admin/individuals", icon: "user", perm: "individuals", section: "Accounts" },
+  { label: "Students", href: "/admin/students", icon: "users", perm: "students", section: "Accounts" },
+
+  { label: "Results & Reports", href: "/admin/results", icon: "report", perm: "results", section: "Assessments" },
+  { label: "Questions & Scoring", href: "/admin/questions", icon: "questions", perm: "questions", section: "Assessments" },
+  { label: "Career Suggestions", href: "/admin/careers", icon: "careers", perm: "careers", section: "Assessments" },
+
+  { label: "Payments", href: "/admin/payments", icon: "card", perm: "payments", section: "Finance" },
+  { label: "Payment Verification", href: "/admin/payment-verification", icon: "verify", perm: "payments", section: "Finance" },
+  { label: "Pricing", href: "/admin/pricing", icon: "pricing", perm: "pricing", section: "Finance" },
+  { label: "Joining Payments", href: "/admin/joining-payments", icon: "receipt", perm: "centres", section: "Finance" },
+  { label: "Settlements", href: "/admin/settlements", icon: "settlements", perm: "centres", section: "Finance" },
+  { label: "Payment Settings", href: "/admin/payment-settings", icon: "settings", perm: "centres", section: "Finance" },
+
+  { label: "Leads & Inquiries", href: "/admin/leads", icon: "leads", perm: "leads", section: "Engagement" },
+  { label: "Email Templates", href: "/admin/email-templates", icon: "email", perm: "content", section: "Engagement" },
+  { label: "Website Content", href: "/admin/content", icon: "content", perm: "content", section: "Engagement" },
+
+  { label: "Audit Trail", href: "/admin/audit", icon: "audit", perm: "audit", section: "System" },
+  { label: "Admin Users", href: "/admin/admins", icon: "admins", perm: "admins", section: "System" },
 ];
 
 export default async function AdminPanelLayout({
