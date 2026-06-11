@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPostMeta } from "@/lib/blog";
+import { getAllLocationMeta } from "@/lib/locations";
 
 const BASE = "https://testpsychometric.com";
 
@@ -20,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/pricing",
     "/contact",
     "/blog",
+    "/psychometric-test",
   ].map((path) => ({
     url: `${BASE}${path}`,
     lastModified: new Date(),
@@ -34,5 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...posts];
+  const locations = getAllLocationMeta().map((l) => ({
+    url: `${BASE}/psychometric-test/${l.slug}`,
+    lastModified: l.dateModified ? new Date(l.dateModified) : new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...posts, ...locations];
 }
