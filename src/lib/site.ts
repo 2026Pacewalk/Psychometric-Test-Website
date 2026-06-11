@@ -44,6 +44,7 @@ export const NAV_LINKS = [
   { label: "Govt Career Guidance", href: "/government-awareness" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "Sample Reports", href: "/sample-report" },
+  { label: "Blog", href: "/blog" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
 ];
