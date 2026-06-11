@@ -41,16 +41,16 @@ export default async function AdminOverview() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Schools" value={schools} icon="🏫" tone="brand" />
-        <StatCard label="Companies" value={companies} icon="🏢" tone="green" />
-        <StatCard label="Individual Users" value={individuals} icon="👤" tone="violet" />
-        <StatCard label="Reports Generated" value={reports} icon="📄" tone="amber" />
+        <StatCard label="Schools" value={schools} icon="🏫" tone="brand" href="/admin/schools" />
+        <StatCard label="Companies" value={companies} icon="🏢" tone="green" href="/admin/companies" />
+        <StatCard label="Individual Users" value={individuals} icon="👤" tone="violet" href="/admin/individuals" />
+        <StatCard label="Reports Generated" value={reports} icon="📄" tone="amber" href="/admin/results" />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Study Centres" value={centres} icon="🏬" tone="brand" />
-        <StatCard label="Individual Revenue" value={`₹${paidAgg._sum.amount ?? 0}`} icon="💰" tone="green" />
-        <StatCard label="Settlement Requests" value={pendingSettlements} icon="🤝" tone="amber" />
-        <StatCard label="New Inquiries" value={newLeads} icon="📥" tone="violet" />
+        <StatCard label="Study Centres" value={centres} icon="🏬" tone="brand" href="/admin/centres" />
+        <StatCard label="Individual Revenue" value={`₹${paidAgg._sum.amount ?? 0}`} icon="💰" tone="green" href="/admin/payments" />
+        <StatCard label="Settlement Requests" value={pendingSettlements} icon="🤝" tone="amber" href="/admin/settlements" />
+        <StatCard label="New Inquiries" value={newLeads} icon="📥" tone="violet" href="/admin/leads" />
       </div>
 
       {pendingSchools > 0 && (
