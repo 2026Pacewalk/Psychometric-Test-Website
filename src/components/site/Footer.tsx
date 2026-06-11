@@ -53,7 +53,10 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} {ORG.operator} · {ORG.domain} · All rights reserved.
+        <p>© {new Date().getFullYear()} {ORG.operator} · {ORG.domain} · All rights reserved.</p>
+        <p className="mt-1">
+          Designed &amp; Developed by <span className="font-semibold text-slate-300">PACEWALK</span>
+        </p>
       </div>
     </footer>
   );
