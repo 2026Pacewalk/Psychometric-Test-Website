@@ -56,7 +56,15 @@ export default function Footer() {
       <div className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
         <p>© {new Date().getFullYear()} {ORG.operator} · {ORG.domain} · All rights reserved.</p>
         <p className="mt-1">
-          Designed &amp; Developed by <span className="font-semibold text-slate-300">PACEWALK</span>
+          Designed &amp; Developed by{" "}
+          <a
+            href="https://pacewalk.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-slate-300 hover:text-white"
+          >
+            PACEWALK
+          </a>
         </p>
       </div>
     </footer>
