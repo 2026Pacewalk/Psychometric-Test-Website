@@ -5,27 +5,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // GUVI-inspired purple brand palette
+        // Refined indigo-violet — elegant & professional (not neon)
         brand: {
-          50: "#f4f0ff",
-          100: "#eae0ff",
-          200: "#d6c5ff",
-          300: "#b89aff",
-          400: "#9a6bff",
-          500: "#7f44ff",
-          600: "#6729ff",
-          700: "#5a1fe6",
-          800: "#4a1cb8",
-          900: "#3c1a90",
-          950: "#23105a",
+          50: "#eef2ff",
+          100: "#e0e7ff",
+          200: "#c7d2fe",
+          300: "#a5b4fc",
+          400: "#818cf8",
+          500: "#6366f1",
+          600: "#4f46e5",
+          700: "#4338ca",
+          800: "#3730a3",
+          900: "#312e81",
+          950: "#1e1b4b",
         },
-        // GUVI green as the secondary accent
+        // Tasteful emerald as the secondary accent
         accent: {
-          50: "#e9fdf1",
-          100: "#c9fbdf",
-          400: "#28e07a",
-          500: "#0ad652",
-          600: "#04b341",
+          50: "#ecfdf5",
+          100: "#d1fae5",
+          400: "#34d399",
+          500: "#10b981",
+          600: "#059669",
         },
       },
       fontFamily: {
