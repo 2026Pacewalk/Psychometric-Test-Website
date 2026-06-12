@@ -46,7 +46,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const post = getPost(params.slug);
   if (!post) return { title: "Article not found" };
   const imgs = getPostImages(post.slug);
-  const ogImage = imgs.social || (imageExists(post.image) ? post.image : "/logo.png");
+  const ogImage = `${BASE}${imgs.og || "/og-default.png"}`;
   return {
     title: post.metaTitle,
     description: post.metaDescription,
@@ -79,7 +79,7 @@ export default function BlogArticle({ params }: { params: { slug: string } }) {
 
   const url = `${BASE}/blog/${post.slug}`;
   const imgs = getPostImages(post.slug);
-  const ogImage = imgs.social ? `${BASE}${imgs.social}` : imageExists(post.image) ? `${BASE}${post.image}` : `${BASE}/logo.png`;
+  const ogImage = `${BASE}${imgs.og || "/og-default.png"}`;
   const bodyHtml = interleaveImages(post.html, imgs.content, post.title);
 
   const articleSchema = {

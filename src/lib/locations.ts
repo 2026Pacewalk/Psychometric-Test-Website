@@ -68,6 +68,12 @@ export function locationImage(slug: string): string | null {
   return fs.existsSync(p) ? `/locations/${slug}/featured.webp` : null;
 }
 
+/** PNG OG image path (WhatsApp/Facebook friendly) if it exists. */
+export function locationOgImage(slug: string): string | null {
+  const p = path.join(process.cwd(), "public", "locations", slug, "og.png");
+  return fs.existsSync(p) ? `/locations/${slug}/og.png` : null;
+}
+
 export function getLocation(slug: string): Location | null {
   const file = path.join(LOC_DIR, `${slug}.md`);
   if (!fs.existsSync(file)) return null;

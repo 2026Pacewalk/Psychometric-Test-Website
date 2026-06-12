@@ -34,6 +34,24 @@ export const metadata: Metadata = {
   ],
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: siteName },
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName,
+    locale: "en_IN",
+    url: "https://testpsychometric.com",
+    title: `${siteName} — Psychometric & Career Guidance Portal`,
+    description:
+      "Scientific psychometric assessment & career guidance for students, schools, companies and individuals. Bilingual English & Punjabi reports.",
+    images: [{ url: "https://testpsychometric.com/og-default.png", width: 1200, height: 630, alt: "TestPsychometric — Psychometric & Career Guidance" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteName} — Psychometric & Career Guidance Portal`,
+    description:
+      "Scientific psychometric assessment & career guidance for students, schools, companies and individuals. Bilingual English & Punjabi reports.",
+    images: ["https://testpsychometric.com/og-default.png"],
+  },
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },

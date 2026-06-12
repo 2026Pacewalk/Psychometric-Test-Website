@@ -95,13 +95,14 @@ export function imageExists(image: string): boolean {
   return fs.existsSync(path.join(process.cwd(), "public", image.replace(/^\//, "")));
 }
 
-/** Discover auto-placed images for a post: social + ordered content images. */
-export function getPostImages(slug: string): { social: string | null; content: string[] } {
+/** Discover auto-placed images for a post: PNG OG image + social + content images. */
+export function getPostImages(slug: string): { og: string | null; social: string | null; content: string[] } {
   const dir = path.join(process.cwd(), "public", "blog", slug);
+  const og = fs.existsSync(path.join(dir, "og.png")) ? `/blog/${slug}/og.png` : null;
   const social = fs.existsSync(path.join(dir, "social.webp")) ? `/blog/${slug}/social.webp` : null;
   const content: string[] = [];
   for (let i = 1; i <= 6; i++) {
     if (fs.existsSync(path.join(dir, `content-${i}.webp`))) content.push(`/blog/${slug}/content-${i}.webp`);
   }
-  return { social, content };
+  return { og, social, content };
 }

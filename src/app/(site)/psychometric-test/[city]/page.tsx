@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllLocationSlugs, getLocation, locationImage } from "@/lib/locations";
+import { getAllLocationSlugs, getLocation, locationImage, locationOgImage } from "@/lib/locations";
 import { ORG, SITE_NAME } from "@/lib/site";
 
 const BASE = "https://testpsychometric.com";
@@ -22,7 +22,13 @@ export function generateMetadata({ params }: { params: { city: string } }): Meta
       title: loc.metaTitle,
       description: loc.metaDescription,
       url: `${BASE}/psychometric-test/${loc.slug}`,
-      images: [{ url: locationImage(loc.slug) || "/logo.png" }],
+      images: [{ url: `${BASE}${locationOgImage(loc.slug) || "/og-default.png"}`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: loc.metaTitle,
+      description: loc.metaDescription,
+      images: [`${BASE}${locationOgImage(loc.slug) || "/og-default.png"}`],
     },
   };
 }

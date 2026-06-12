@@ -7,6 +7,20 @@ export const metadata: Metadata = {
   description:
     "Expert guides on psychometric tests, career assessment, RIASEC, multiple intelligence and career guidance for students, parents, schools and companies in India.",
   alternates: { canonical: "/blog" },
+  openGraph: {
+    type: "website",
+    title: "Career & Psychometric Testing Blog | TestPsychometric",
+    description:
+      "Expert guides on psychometric tests, career assessment, RIASEC and career guidance for students, parents, schools and companies in India.",
+    url: "https://testpsychometric.com/blog",
+    images: [{ url: "https://testpsychometric.com/og-default.png", width: 1200, height: 630, alt: "TestPsychometric Blog" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Career & Psychometric Testing Blog | TestPsychometric",
+    description: "Expert guides on psychometric tests and career guidance for India.",
+    images: ["https://testpsychometric.com/og-default.png"],
+  },
 };
 
 export const dynamic = "force-dynamic";
