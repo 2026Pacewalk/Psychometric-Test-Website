@@ -1,6 +1,6 @@
 // Simple service worker: network-first for navigations with an offline fallback,
 // and a small static cache. Avoids caching API/auth responses.
-const CACHE = "tp-v2";
+const CACHE = "tp-v3";
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
