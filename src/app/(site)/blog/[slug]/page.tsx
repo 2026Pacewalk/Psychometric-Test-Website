@@ -1,10 +1,42 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllSlugs, getPost, imageExists } from "@/lib/blog";
+import { getAllSlugs, getPost, imageExists, getPostImages } from "@/lib/blog";
 import { ORG, SITE_NAME } from "@/lib/site";
 
 const BASE = "https://testpsychometric.com";
+
+/** Interleave content images between article sections (after intro, then spaced across H2s). */
+function interleaveImages(html: string, images: string[], altBase: string): string {
+  if (!images.length) return html;
+  const parts = html.split(/(?=<h2)/g); // parts[0] = intro; each later part starts with an <h2>
+  if (parts.length < 2) {
+    // No headings — just append images at the end.
+    return html + images.map((src, i) => figure(src, `${altBase} — illustration ${i + 1}`)).join("");
+  }
+  // Choose insertion points: before part[1] (after intro), then spaced across remaining sections.
+  const slots: number[] = [1];
+  const step = Math.max(1, Math.floor((parts.length - 1) / images.length));
+  for (let i = 1; i < images.length; i++) slots.push(Math.min(parts.length - 1, 1 + i * step));
+  const out: string[] = [];
+  let imgIdx = 0;
+  for (let i = 0; i < parts.length; i++) {
+    if (slots.includes(i) && imgIdx < images.length) {
+      out.push(figure(images[imgIdx], `${altBase} — illustration ${imgIdx + 1}`));
+      imgIdx++;
+    }
+    out.push(parts[i]);
+  }
+  while (imgIdx < images.length) {
+    out.push(figure(images[imgIdx], `${altBase} — illustration ${imgIdx + 1}`));
+    imgIdx++;
+  }
+  return out.join("");
+}
+
+function figure(src: string, alt: string): string {
+  return `<figure class="not-prose my-8"><img src="${src}" alt="${alt}" loading="lazy" class="w-full rounded-2xl shadow-sm" /></figure>`;
+}
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -13,7 +45,8 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const post = getPost(params.slug);
   if (!post) return { title: "Article not found" };
-  const ogImage = imageExists(post.image) ? post.image : "/logo.png";
+  const imgs = getPostImages(post.slug);
+  const ogImage = imgs.social || (imageExists(post.image) ? post.image : "/logo.png");
   return {
     title: post.metaTitle,
     description: post.metaDescription,
@@ -45,7 +78,9 @@ export default function BlogArticle({ params }: { params: { slug: string } }) {
   if (!post) notFound();
 
   const url = `${BASE}/blog/${post.slug}`;
-  const ogImage = imageExists(post.image) ? `${BASE}${post.image}` : `${BASE}/logo.png`;
+  const imgs = getPostImages(post.slug);
+  const ogImage = imgs.social ? `${BASE}${imgs.social}` : imageExists(post.image) ? `${BASE}${post.image}` : `${BASE}/logo.png`;
+  const bodyHtml = interleaveImages(post.html, imgs.content, post.title);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -129,7 +164,7 @@ export default function BlogArticle({ params }: { params: { slug: string } }) {
       <div className="container-page grid gap-10 py-10 lg:grid-cols-[1fr_300px] lg:py-14">
         <div
           className="prose prose-slate max-w-none prose-headings:scroll-mt-24 prose-headings:font-extrabold prose-h2:text-2xl prose-h2:mt-10 prose-a:font-semibold prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline prose-blockquote:rounded-r-xl prose-blockquote:border-brand-500 prose-blockquote:bg-brand-50 prose-blockquote:py-1 prose-blockquote:not-italic prose-table:text-sm"
-          dangerouslySetInnerHTML={{ __html: post.html }}
+          dangerouslySetInnerHTML={{ __html: bodyHtml }}
         />
 
         {/* Sidebar */}

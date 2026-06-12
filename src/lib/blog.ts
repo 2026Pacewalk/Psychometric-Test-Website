@@ -45,12 +45,14 @@ function normalize(data: Record<string, any>, slug: string): PostMeta {
     metaTitle: data.metaTitle || data.title || slug,
     metaDescription: data.metaDescription || data.excerpt || "",
     excerpt: data.excerpt || data.metaDescription || "",
+    // Convention: featured image auto-wires from /public/blog/<slug>/featured.webp
+    // (frontmatter `image` still honoured as an override if provided).
+    image: data.image && !/\.jpg$/.test(data.image) ? data.image : `/blog/${slug}/featured.webp`,
     publishDate: data.publishDate || "",
     dateModified: data.dateModified || data.publishDate || "",
     author: data.author || "TestPsychometric Career Team",
     category: data.category || "Career Guidance",
     readingTime: data.readingTime || "",
-    image: data.image || "",
     imageAlt: data.imageAlt || data.title || slug,
     imageCaption: data.imageCaption || "",
     keywords: Array.isArray(data.keywords) ? data.keywords : [],
@@ -91,4 +93,15 @@ export function getPost(slug: string): Post | null {
 export function imageExists(image: string): boolean {
   if (!image) return false;
   return fs.existsSync(path.join(process.cwd(), "public", image.replace(/^\//, "")));
+}
+
+/** Discover auto-placed images for a post: social + ordered content images. */
+export function getPostImages(slug: string): { social: string | null; content: string[] } {
+  const dir = path.join(process.cwd(), "public", "blog", slug);
+  const social = fs.existsSync(path.join(dir, "social.webp")) ? `/blog/${slug}/social.webp` : null;
+  const content: string[] = [];
+  for (let i = 1; i <= 6; i++) {
+    if (fs.existsSync(path.join(dir, `content-${i}.webp`))) content.push(`/blog/${slug}/content-${i}.webp`);
+  }
+  return { social, content };
 }
