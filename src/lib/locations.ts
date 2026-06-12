@@ -62,6 +62,12 @@ export function getAllLocationSlugs(): string[] {
   return fs.readdirSync(LOC_DIR).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
 }
 
+/** Featured image path for a location if it exists in /public. */
+export function locationImage(slug: string): string | null {
+  const p = path.join(process.cwd(), "public", "locations", slug, "featured.webp");
+  return fs.existsSync(p) ? `/locations/${slug}/featured.webp` : null;
+}
+
 export function getLocation(slug: string): Location | null {
   const file = path.join(LOC_DIR, `${slug}.md`);
   if (!fs.existsSync(file)) return null;

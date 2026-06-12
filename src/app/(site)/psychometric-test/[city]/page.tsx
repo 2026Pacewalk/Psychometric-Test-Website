@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllLocationSlugs, getLocation } from "@/lib/locations";
+import { getAllLocationSlugs, getLocation, locationImage } from "@/lib/locations";
 import { ORG, SITE_NAME } from "@/lib/site";
 
 const BASE = "https://testpsychometric.com";
@@ -22,7 +22,7 @@ export function generateMetadata({ params }: { params: { city: string } }): Meta
       title: loc.metaTitle,
       description: loc.metaDescription,
       url: `${BASE}/psychometric-test/${loc.slug}`,
-      images: [{ url: "/logo.png" }],
+      images: [{ url: locationImage(loc.slug) || "/logo.png" }],
     },
   };
 }
@@ -120,6 +120,12 @@ export default function LocationPage({ params }: { params: { city: string } }) {
           </div>
         </div>
       </header>
+
+      {locationImage(loc.slug) && (
+        <figure className="container-page -mt-6">
+          <img src={locationImage(loc.slug) as string} alt={`Psychometric test and career counselling in ${loc.city}`} className="w-full rounded-2xl shadow-lg" />
+        </figure>
+      )}
 
       {/* Body */}
       <div className="container-page grid gap-10 py-10 lg:grid-cols-[1fr_300px] lg:py-14">
